@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+I'm<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -2072,6 +2072,26 @@ document.getElementById('yr').textContent = new Date().getFullYear();
 })();
 
 renderRoute();
+ // Sends new accounts directly to your backend database
+async function saveAccountPermanently(name, handle) {
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, handle })
+    });
+    const result = await res.json();
+    if (result.success) {
+      G.profile.db_id = result.profile.id;
+      G.points = result.profile.points;
+      save();
+      toast('Account saved permanently to the cloud!');
+    }
+  } catch (err) {
+    console.error('Offline mode active:', err);
+  }
+ }
+ 
 </script>
 </body>
 </html>
